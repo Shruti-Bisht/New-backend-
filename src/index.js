@@ -1,9 +1,9 @@
 import dotenv from "dotenv";
-import express from "express";
+
 import dbConnection from "./db/index.js";
+import { app } from "./app.js";
 
 dotenv.config();
-const app = express();
 
 
 // First approch to connect to DB 
@@ -25,7 +25,17 @@ const app = express();
 //     }
 // })()
 
-app.listen(`${process.env.PORT}`,()=>{
-    console.log(`Server is Running on Port: ${process.env.PORT}`);
-    dbConnection();
+
+// as db function is async thus it return a promise
+dbConnection()
+.then(()=>{
+    app.on("error",(error)=>{
+        console.log(`Error occure while connecting`);
+    })
+    app.listen(process.env.PORT,()=>{
+        console.log(`Server is Running on Port : ${process.env.PORT}`);
+    })
+})
+.catch((err)=>{
+   console.log("Error while Connecting ",err);
 })

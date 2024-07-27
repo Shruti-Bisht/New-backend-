@@ -11,9 +11,10 @@ class ApiError extends Error{
         this.success = false;
 
         if(stack){
+            // error.stack property is a string describing the point in the code at which the error was instantiated .  
             this.stack = stack;
         }else{
-            // passing the instance about the whole context being processed
+            // Error.captureStackTrace(targetObject,constructorOpt) creates a .stack property on targetObject , which when accessed returns a string representing the location in the code at which Error.captureStackTrace() was called.
             Error.captureStackTrace(this,this.constructor);
         }
     }
